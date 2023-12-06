@@ -1,6 +1,5 @@
-package com.example.AmazonBackendClone.repository;
-
-import com.example.AmazonBackendClone.entity.OrderEntity;
+package com.example.cs393backend.repository;
+import com.example.cs393backend.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
