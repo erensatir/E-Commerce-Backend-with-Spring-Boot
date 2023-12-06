@@ -1,6 +1,6 @@
 package com.example.cs393backend.util;
 
-import com.example.AmazonBackendClone.dto.ProductDto;
+import com.example.cs393backend.dto.ProductDto;
 import com.example.cs393backend.entity.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

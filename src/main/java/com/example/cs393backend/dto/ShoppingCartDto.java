@@ -1,4 +1,4 @@
-package com.example.AmazonBackendClone.dto;
+package com.example.cs393backend.dto;
 
 import java.util.List;
 
