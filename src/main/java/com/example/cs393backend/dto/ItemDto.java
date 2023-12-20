@@ -2,9 +2,11 @@ package com.example.cs393backend.dto;
 
 public class ItemDto {
     private long id;
-    private ProductDto product;
+    private long productId; // ID of the associated product
     private int quantity;
-    private ShoppingCartDto shoppingCart;
+    private long shoppingCartId; // ID of the associated shopping cart
+
+    // Getters and Setters
 
     public long getId() {
         return id;
@@ -14,12 +16,12 @@ public class ItemDto {
         this.id = id;
     }
 
-    public ProductDto getProduct() {
-        return product;
+    public long getProductId() {
+        return productId;
     }
 
-    public void setProduct(ProductDto product) {
-        this.product = product;
+    public void setProductId(long productId) {
+        this.productId = productId;
     }
 
     public int getQuantity() {
@@ -30,11 +32,11 @@ public class ItemDto {
         this.quantity = quantity;
     }
 
-    public ShoppingCartDto getShoppingCart() {
-        return shoppingCart;
+    public long getShoppingCartId() {
+        return shoppingCartId;
     }
 
-    public void setShoppingCart(ShoppingCartDto shoppingCart) {
-        this.shoppingCart = shoppingCart;
+    public void setShoppingCartId(long shoppingCartId) {
+        this.shoppingCartId = shoppingCartId;
     }
 }

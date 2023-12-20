@@ -7,10 +7,7 @@ public class ProductDto {
     private String name;
     private String description;
     private double price;
-    private List<ReviewDto> reviews;
-    private List<ItemDto> items;
-
-    // Getters and setters
+    private List<Long> reviewIds; // Only IDs of the reviews
 
     public long getId() {
         return id;
@@ -44,19 +41,11 @@ public class ProductDto {
         this.price = price;
     }
 
-    public List<ReviewDto> getReviews() {
-        return reviews;
+    public List<Long> getReviewIds() {
+        return reviewIds;
     }
 
-    public void setReviews(List<ReviewDto> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<ItemDto> getItems() {
-        return items;
-    }
-
-    public void setItems(List<ItemDto> items) {
-        this.items = items;
+    public void setReviewIds(List<Long> reviewIds) {
+        this.reviewIds = reviewIds;
     }
 }

@@ -5,10 +5,10 @@ import com.example.cs393backend.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-// UserMapper.java
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserDto toDto(UserEntity userEntity);
-    UserEntity toEntity(UserDto userDto);
-    void updateUserFromDto(UserDto dto, @MappingTarget UserEntity entity);
+    UserDto userEntityToDto(UserEntity userEntity);
+    UserEntity userDtoToEntity(UserDto userDto);
+
+    void updateUserFromDto(UserDto userDto, @MappingTarget UserEntity userEntity);
 }

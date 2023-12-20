@@ -11,10 +11,10 @@ public class ShoppingCartEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne (mappedBy = "shoppingCart")
+    @OneToOne(mappedBy = "shoppingCart")
     private UserEntity user;
 
-    @OneToMany (mappedBy = "shoppingCart")
+    @OneToMany(mappedBy = "shoppingCart")
     private List<ItemEntity> items;
 
     public Long getId() {

@@ -1,14 +1,15 @@
 package com.example.cs393backend;
 
-import com.example.cs393backend.entity.*;
-import com.example.cs393backend.repository.*;
+import com.example.cs393backend.dto.*;
+import com.example.cs393backend.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 
 @SpringBootApplication
 public class Cs393backendApplication {
@@ -16,84 +17,102 @@ public class Cs393backendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Cs393backendApplication.class, args);
 	}
+
 	@Bean
-	public CommandLineRunner demo(UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository, AddressRepository addressRepository, ShoppingCartRepository shoppingCartRepository, ItemRepository itemRepository) {
+	public CommandLineRunner demo(UserService userService, ProductService productService, OrderService orderService, AddressService addressService, ShoppingCartService shoppingCartService, ItemService itemService, ReviewService reviewService) {
 		return (args) -> {
-			// Create initial users
-			UserEntity user1 = new UserEntity();
+			// User Initialization
+			UserDto user1 = new UserDto();
 			user1.setUsername("user1");
 			user1.setEmail("user1@example.com");
-			user1 = userRepository.save(user1);
+			user1 = userService.createUser(user1);
 
-			UserEntity user2 = new UserEntity();
+			UserDto user2 = new UserDto();
 			user2.setUsername("user2");
 			user2.setEmail("user2@example.com");
-			user2 = userRepository.save(user2);
+			user2 = userService.createUser(user2);
 
-			// Create initial products
-			ProductEntity product1 = new ProductEntity();
+			// Product Initialization
+			ProductDto product1 = new ProductDto();
 			product1.setName("Product 1");
 			product1.setDescription("Description for Product 1");
 			product1.setPrice(10.0);
-			product1 = productRepository.save(product1);
+			product1 = productService.createProduct(product1);
 
-			ProductEntity product2 = new ProductEntity();
+			ProductDto product2 = new ProductDto();
 			product2.setName("Product 2");
 			product2.setDescription("Description for Product 2");
 			product2.setPrice(20.0);
-			product2 = productRepository.save(product2);
+			product2 = productService.createProduct(product2);
 
-			// Create initial shopping carts and associate them with users
-			ShoppingCartEntity shoppingCart1 = new ShoppingCartEntity();
-			shoppingCart1.setUser(user1);
-			shoppingCart1 = shoppingCartRepository.save(shoppingCart1);
-
-			ShoppingCartEntity shoppingCart2 = new ShoppingCartEntity();
-			shoppingCart2.setUser(user2);
-			shoppingCart2 = shoppingCartRepository.save(shoppingCart2);
-
-			// Create initial items and associate them with shopping carts and products
-			ItemEntity item1 = new ItemEntity();
-			item1.setProduct(product1);
-			item1.setQuantity(1);
-			item1.setShoppingCart(shoppingCart1);
-			item1 = itemRepository.save(item1);
-
-			ItemEntity item2 = new ItemEntity();
-			item2.setProduct(product2);
-			item2.setQuantity(2);
-			item2.setShoppingCart(shoppingCart2);
-			item2 = itemRepository.save(item2);
-
-			// Create initial orders, associate them with users and addresses, and add products to them
-			OrderEntity orderEntity1 = new OrderEntity();
-			orderEntity1.setUser(user1);
-			orderEntity1.setTotalAmount(new BigDecimal(10));
-			orderEntity1.setProducts(Arrays.asList(product1));
-			orderEntity1 = orderRepository.save(orderEntity1);
-
-			OrderEntity orderEntity2 = new OrderEntity();
-			orderEntity2.setUser(user2);
-			orderEntity2.setTotalAmount(new BigDecimal(40));
-			orderEntity2.setProducts(Arrays.asList(product1, product2));
-			orderEntity2 = orderRepository.save(orderEntity2);
-
-			// Create initial addresses and associate them with orders
-			AddressEntity address1 = new AddressEntity();
+			// Address Initialization
+			AddressDto address1 = new AddressDto();
 			address1.setStreet("Street 1");
 			address1.setCity("City 1");
 			address1.setState("State 1");
 			address1.setZip("Zip 1");
-			address1.setOrderEntities(Arrays.asList(orderEntity1));
-			address1 = addressRepository.save(address1);
+			address1 = addressService.createAddress(address1);
 
-			AddressEntity address2 = new AddressEntity();
+			AddressDto address2 = new AddressDto();
 			address2.setStreet("Street 2");
 			address2.setCity("City 2");
 			address2.setState("State 2");
 			address2.setZip("Zip 2");
-			address2.setOrderEntities(Arrays.asList(orderEntity2));
-			address2 = addressRepository.save(address2);
+			address2 = addressService.createAddress(address2);
+
+			// Order Initialization
+			OrderDto order1 = new OrderDto();
+			order1.setUserId(user1.getId());
+			order1.setTotalAmount(new BigDecimal("100.00"));
+			order1.setOrderDate(new Date());
+			order1.setAddressId(address1.getId());
+			order1.setProductIds(Arrays.asList(product1.getId(), product2.getId()));
+			order1 = orderService.createOrder(order1);
+
+			OrderDto order2 = new OrderDto();
+			order2.setUserId(user2.getId());
+			order2.setTotalAmount(new BigDecimal("150.00"));
+			order2.setOrderDate(new Date());
+			order2.setAddressId(address2.getId());
+			order2.setProductIds(Collections.singletonList(product2.getId()));
+			order2 = orderService.createOrder(order2);
+
+			// ShoppingCart Initialization
+			ShoppingCartDto shoppingCart1 = new ShoppingCartDto();
+			shoppingCart1.setUserId(user1.getId());
+			shoppingCart1 = shoppingCartService.createShoppingCart(shoppingCart1);
+
+			ShoppingCartDto shoppingCart2 = new ShoppingCartDto();
+			shoppingCart2.setUserId(user2.getId());
+			shoppingCart2 = shoppingCartService.createShoppingCart(shoppingCart2);
+
+			// Item Initialization
+			ItemDto item1 = new ItemDto();
+			item1.setProductId(product1.getId());
+			item1.setQuantity(2);
+			item1.setShoppingCartId(shoppingCart1.getId());
+			item1 = itemService.createItem(item1);
+
+			ItemDto item2 = new ItemDto();
+			item2.setProductId(product2.getId());
+			item2.setQuantity(3);
+			item2.setShoppingCartId(shoppingCart2.getId());
+			item2 = itemService.createItem(item2);
+
+			// Review Initialization
+			ReviewDto review1 = new ReviewDto();
+			review1.setUserId(user1.getId());
+			review1.setProductId(product1.getId());
+			review1.setRating(5);
+			review1.setComment("Great product!");
+			review1 = reviewService.createReview(review1);
+
+			ReviewDto review2 = new ReviewDto();
+			review2.setUserId(user2.getId());
+			review2.setProductId(product2.getId());
+			review2.setRating(4);
+			review2.setComment("Good, but could be better.");
+			review2 = reviewService.createReview(review2);
 		};
 	}
 }

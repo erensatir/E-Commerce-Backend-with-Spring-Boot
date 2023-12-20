@@ -1,14 +1,13 @@
 package com.example.cs393backend.dto;
 
-import java.util.List;
-
 public class AddressDto {
     private Long id;
     private String street;
     private String city;
     private String state;
     private String zip;
-    private List<OrderDto> orders;
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -48,13 +47,5 @@ public class AddressDto {
 
     public void setZip(String zip) {
         this.zip = zip;
-    }
-
-    public List<OrderDto> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<OrderDto> orders) {
-        this.orders = orders;
     }
 }

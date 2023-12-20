@@ -4,11 +4,19 @@ import java.util.List;
 
 public class ShoppingCartDto {
     private Long id;
-    private UserDto user;
-    private List<ItemDto> items;
+    private Long userId; // User's ID associated with the shopping cart
+    private List<Long> itemIds; // List of item IDs in the shopping cart
 
-    // Getters and setters
+    // Constructors
+    public ShoppingCartDto() {}
 
+    public ShoppingCartDto(Long id, Long userId, List<Long> itemIds) {
+        this.id = id;
+        this.userId = userId;
+        this.itemIds = itemIds;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -17,19 +25,19 @@ public class ShoppingCartDto {
         this.id = id;
     }
 
-    public UserDto getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public List<ItemDto> getItems() {
-        return items;
+    public List<Long> getItemIds() {
+        return itemIds;
     }
 
-    public void setItems(List<ItemDto> items) {
-        this.items = items;
+    public void setItemIds(List<Long> itemIds) {
+        this.itemIds = itemIds;
     }
 }

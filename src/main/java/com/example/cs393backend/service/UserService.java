@@ -2,49 +2,54 @@ package com.example.cs393backend.service;
 
 import com.example.cs393backend.dto.UserDto;
 import com.example.cs393backend.entity.UserEntity;
-import com.example.cs393backend.repository.UserRepository;
 import com.example.cs393backend.util.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.cs393backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-// UserService.java
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserDto createUser(UserDto userDto) {
-        UserEntity userEntity = userMapper.toEntity(userDto);
-        userRepository.save(userEntity);
-        return userMapper.toDto(userEntity);
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public UserDto getUser(Long id) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        return userMapper.toDto(userEntity);
-    }
-
-    public List<UserDto> getAllUsers() {
-        List<UserEntity> userEntities = userRepository.findAll();
-        return userEntities.stream()
-                .map(userMapper::toDto)
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(userMapper::userEntityToDto)
                 .collect(Collectors.toList());
     }
 
-    public UserDto updateUser(UserDto userDto) {
-        UserEntity userEntity = userRepository.findById(userDto.getId())
+    public UserDto findById(Long id) {
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        userMapper.updateUserFromDto(userDto, userEntity);
-        userRepository.save(userEntity);
-        return userMapper.toDto(userEntity);
+        return userMapper.userEntityToDto(user);
     }
+
+    public UserDto createUser(UserDto userDto) {
+        UserEntity userEntity = userMapper.userDtoToEntity(userDto);
+        UserEntity savedUser = userRepository.save(userEntity);
+        return userMapper.userEntityToDto(savedUser);
+    }
+
+    // Optional: Implement update and delete methods
+    public UserDto updateUser(Long id, UserDto userDto) {
+        UserEntity existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userMapper.updateUserFromDto(userDto, existingUser);
+        userRepository.save(existingUser);
+        return userMapper.userEntityToDto(existingUser);
+    }
+
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    // Other business logic methods can be added as needed
 }

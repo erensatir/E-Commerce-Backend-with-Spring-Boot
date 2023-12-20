@@ -8,11 +8,11 @@ public class OrderDto {
     private Long id;
     private Date orderDate;
     private BigDecimal totalAmount;
-    private UserDto user;
-    private List<ProductDto> products;
-    private AddressDto address;
+    private Long userId; // User ID associated with the order
+    private Long addressId; // Address ID associated with the order
+    private List<Long> productIds; // Product IDs associated with the order
 
-    // Getters and setters
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -38,27 +38,27 @@ public class OrderDto {
         this.totalAmount = totalAmount;
     }
 
-    public UserDto getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public List<ProductDto> getProducts() {
-        return products;
+    public Long getAddressId() {
+        return addressId;
     }
 
-    public void setProducts(List<ProductDto> products) {
-        this.products = products;
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
-    public AddressDto getAddress() {
-        return address;
+    public List<Long> getProductIds() {
+        return productIds;
     }
 
-    public void setAddress(AddressDto address) {
-        this.address = address;
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds;
     }
 }

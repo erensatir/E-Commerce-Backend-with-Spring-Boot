@@ -2,32 +2,49 @@ package com.example.cs393backend.controller;
 
 import com.example.cs393backend.dto.OrderDto;
 import com.example.cs393backend.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
-    @PostMapping
-    public OrderDto createOrder(@RequestBody OrderDto orderDto) {
-        return orderService.createOrder(orderDto);
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        List<OrderDto> orders = orderService.findAll();
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")
-    public OrderDto getOrder(@PathVariable Long id) {
-        return orderService.getOrder(id);
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
+        OrderDto order = orderService.findById(id);
+        return ResponseEntity.ok(order);
     }
 
-    @PutMapping
-    public OrderDto updateOrder(@RequestBody OrderDto orderDto) {
-        return orderService.updateOrder(orderDto);
+    @PostMapping
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
+        OrderDto newOrder = orderService.createOrder(orderDto);
+        return ResponseEntity.ok(newOrder);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id, @RequestBody OrderDto orderDto) {
+        OrderDto updatedOrder = orderService.updateOrder(id, orderDto);
+        return ResponseEntity.ok(updatedOrder);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
+        return ResponseEntity.ok().build();
     }
+
+    // Additional endpoints as needed
 }

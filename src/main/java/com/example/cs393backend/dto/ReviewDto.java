@@ -4,10 +4,10 @@ public class ReviewDto {
     private Long id;
     private int rating;
     private String comment;
-    private UserDto user;
-    private ProductDto product;
+    private Long userId; // User ID for the review
+    private Long productId; // Product ID for the review
 
-    // Getters and setters
+
 
     public Long getId() {
         return id;
@@ -33,19 +33,20 @@ public class ReviewDto {
         this.comment = comment;
     }
 
-    public UserDto getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public ProductDto getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(ProductDto product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
+// Getters and Setters
 }

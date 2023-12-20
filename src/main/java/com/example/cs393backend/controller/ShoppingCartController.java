@@ -2,32 +2,49 @@ package com.example.cs393backend.controller;
 
 import com.example.cs393backend.dto.ShoppingCartDto;
 import com.example.cs393backend.service.ShoppingCartService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/shopping-carts")
-public class ShoppingCartController {
-    @Autowired
-    private ShoppingCartService shoppingCartService;
+import java.util.List;
 
-    @PostMapping
-    public ShoppingCartDto createShoppingCart(@RequestBody ShoppingCartDto shoppingCartDto) {
-        return shoppingCartService.createShoppingCart(shoppingCartDto);
+@RestController
+@RequestMapping("/shoppingCarts")
+public class ShoppingCartController {
+    private final ShoppingCartService shoppingCartService;
+
+    public ShoppingCartController(ShoppingCartService shoppingCartService) {
+        this.shoppingCartService = shoppingCartService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ShoppingCartDto>> getAllShoppingCarts() {
+        List<ShoppingCartDto> shoppingCarts = shoppingCartService.findAll();
+        return ResponseEntity.ok(shoppingCarts);
     }
 
     @GetMapping("/{id}")
-    public ShoppingCartDto getShoppingCart(@PathVariable Long id) {
-        return shoppingCartService.getShoppingCart(id);
+    public ResponseEntity<ShoppingCartDto> getShoppingCartById(@PathVariable Long id) {
+        ShoppingCartDto shoppingCart = shoppingCartService.findById(id);
+        return ResponseEntity.ok(shoppingCart);
     }
 
-    @PutMapping
-    public ShoppingCartDto updateShoppingCart(@RequestBody ShoppingCartDto shoppingCartDto) {
-        return shoppingCartService.updateShoppingCart(shoppingCartDto);
+    @PostMapping
+    public ResponseEntity<ShoppingCartDto> createShoppingCart(@RequestBody ShoppingCartDto shoppingCartDto) {
+        ShoppingCartDto newShoppingCart = shoppingCartService.createShoppingCart(shoppingCartDto);
+        return ResponseEntity.ok(newShoppingCart);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ShoppingCartDto> updateShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartDto shoppingCartDto) {
+        ShoppingCartDto updatedShoppingCart = shoppingCartService.updateShoppingCart(id, shoppingCartDto);
+        return ResponseEntity.ok(updatedShoppingCart);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteShoppingCart(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteShoppingCart(@PathVariable Long id) {
         shoppingCartService.deleteShoppingCart(id);
+        return ResponseEntity.ok().build();
     }
+
+    // Additional endpoints can be added as per your application's requirements
 }

@@ -2,32 +2,49 @@ package com.example.cs393backend.controller;
 
 import com.example.cs393backend.dto.ItemDto;
 import com.example.cs393backend.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/items")
 public class ItemController {
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
 
-    @PostMapping
-    public ItemDto createItem(@RequestBody ItemDto itemDto) {
-        return itemService.createItem(itemDto);
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ItemDto>> getAllItems() {
+        List<ItemDto> items = itemService.findAll();
+        return ResponseEntity.ok(items);
     }
 
     @GetMapping("/{id}")
-    public ItemDto getItem(@PathVariable long id) {
-        return itemService.getItem(id);
+    public ResponseEntity<ItemDto> getItemById(@PathVariable Long id) {
+        ItemDto item = itemService.findById(id);
+        return ResponseEntity.ok(item);
     }
 
-    @PutMapping
-    public ItemDto updateItem(@RequestBody ItemDto itemDto) {
-        return itemService.updateItem(itemDto);
+    @PostMapping
+    public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto itemDto) {
+        ItemDto newItem = itemService.createItem(itemDto);
+        return ResponseEntity.ok(newItem);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemDto> updateItem(@PathVariable Long id, @RequestBody ItemDto itemDto) {
+        ItemDto updatedItem = itemService.updateItem(id, itemDto);
+        return ResponseEntity.ok(updatedItem);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable long id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
+        return ResponseEntity.ok().build();
     }
+
+    // Additional endpoints as needed
 }

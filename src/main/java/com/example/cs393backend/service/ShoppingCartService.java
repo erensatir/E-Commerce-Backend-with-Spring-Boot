@@ -2,40 +2,69 @@ package com.example.cs393backend.service;
 
 import com.example.cs393backend.dto.ShoppingCartDto;
 import com.example.cs393backend.entity.ShoppingCartEntity;
-import com.example.cs393backend.repository.ShoppingCartRepository;
+import com.example.cs393backend.entity.UserEntity;
 import com.example.cs393backend.util.ShoppingCartMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.cs393backend.repository.ShoppingCartRepository;
+import com.example.cs393backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShoppingCartService {
-    @Autowired
-    private ShoppingCartRepository shoppingCartRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final UserRepository userRepository;
+    private final ShoppingCartMapper shoppingCartMapper;
 
-    @Autowired
-    private ShoppingCartMapper shoppingCartMapper;
+    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, UserRepository userRepository, ShoppingCartMapper shoppingCartMapper) {
+        this.shoppingCartRepository = shoppingCartRepository;
+        this.userRepository = userRepository;
+        this.shoppingCartMapper = shoppingCartMapper;
+    }
+
+    public List<ShoppingCartDto> findAll() {
+        return shoppingCartRepository.findAll().stream()
+                .map(shoppingCartMapper::shoppingCartEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public ShoppingCartDto findById(Long id) {
+        ShoppingCartEntity shoppingCart = shoppingCartRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Shopping cart not found"));
+        return shoppingCartMapper.shoppingCartEntityToDto(shoppingCart);
+    }
 
     public ShoppingCartDto createShoppingCart(ShoppingCartDto shoppingCartDto) {
-        ShoppingCartEntity shoppingCartEntity = shoppingCartMapper.toEntity(shoppingCartDto);
-        shoppingCartRepository.save(shoppingCartEntity);
-        return shoppingCartMapper.toDto(shoppingCartEntity);
+        ShoppingCartEntity shoppingCart = new ShoppingCartEntity();
+
+        // Set user for the shopping cart
+        UserEntity user = userRepository.findById(shoppingCartDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        shoppingCart.setUser(user);
+
+        // Save the new shopping cart
+        ShoppingCartEntity savedCart = shoppingCartRepository.save(shoppingCart);
+        return shoppingCartMapper.shoppingCartEntityToDto(savedCart);
     }
 
-    public ShoppingCartDto getShoppingCart(Long id) {
-        ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("ShoppingCart not found"));
-        return shoppingCartMapper.toDto(shoppingCartEntity);
-    }
+    public ShoppingCartDto updateShoppingCart(Long id, ShoppingCartDto shoppingCartDto) {
+        ShoppingCartEntity shoppingCart = shoppingCartRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Shopping cart not found"));
 
-    public ShoppingCartDto updateShoppingCart(ShoppingCartDto shoppingCartDto) {
-        ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findById(shoppingCartDto.getId())
-                .orElseThrow(() -> new RuntimeException("ShoppingCart not found"));
-        shoppingCartMapper.updateShoppingCartFromDto(shoppingCartDto, shoppingCartEntity);
-        shoppingCartRepository.save(shoppingCartEntity);
-        return shoppingCartMapper.toDto(shoppingCartEntity);
+        // Update logic here. For instance, you might want to update the items in the cart.
+        // This part is highly dependent on your application's business logic.
+
+        ShoppingCartEntity updatedCart = shoppingCartRepository.save(shoppingCart);
+        return shoppingCartMapper.shoppingCartEntityToDto(updatedCart);
     }
 
     public void deleteShoppingCart(Long id) {
+        if (!shoppingCartRepository.existsById(id)) {
+            throw new RuntimeException("Shopping cart not found");
+        }
         shoppingCartRepository.deleteById(id);
     }
+
+    // Additional methods can be added as per your application's requirements
 }
