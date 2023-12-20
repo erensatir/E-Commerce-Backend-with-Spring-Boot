@@ -1,4 +1,4 @@
-package com.example.cs393backend;
+package com.example.cs393backend.RepositoryTests;
 
 import com.example.cs393backend.entity.ShoppingCartEntity;
 import com.example.cs393backend.entity.UserEntity;

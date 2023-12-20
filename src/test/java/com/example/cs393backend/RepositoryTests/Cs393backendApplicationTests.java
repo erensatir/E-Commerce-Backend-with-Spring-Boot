@@ -1,4 +1,4 @@
-package com.example.cs393backend;
+package com.example.cs393backend.RepositoryTests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
