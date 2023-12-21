@@ -48,7 +48,11 @@ public class UserService {
 
 
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
     // Other business logic methods can be added as needed

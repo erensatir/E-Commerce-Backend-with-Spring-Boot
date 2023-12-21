@@ -92,5 +92,44 @@ public class UserServiceTest {
         verify(userMapper).userEntityToDto(any(UserEntity.class));
     }
 
-    // Similar tests can be written for updateUser and deleteUser methods
+    @Test
+    void updateUser() {
+        // Arrange
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(userEntity));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
+
+        UserDto updatedUserDto = new UserDto();
+        updatedUserDto.setId(1L);
+        updatedUserDto.setUsername("updatedUser");
+        updatedUserDto.setEmail("updated@example.com");
+
+        // Act
+        when(userMapper.userEntityToDto(any(UserEntity.class))).thenReturn(updatedUserDto);
+        UserDto result = userService.updateUser(1L, updatedUserDto);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(updatedUserDto.getUsername(), result.getUsername());
+        assertEquals(updatedUserDto.getEmail(), result.getEmail());
+
+        verify(userRepository).findById(anyLong());
+        verify(userRepository).save(any(UserEntity.class));
+        verify(userMapper).userEntityToDto(any(UserEntity.class));
+    }
+
+
+    @Test
+    void deleteUser() {
+        Long userId = 1L;
+        when(userRepository.existsById(userId)).thenReturn(true);
+        doNothing().when(userRepository).deleteById(anyLong());
+
+        userService.deleteUser(userId);
+
+        verify(userRepository).existsById(userId); // Verifies that existsById is called
+        verify(userRepository).deleteById(userId); // Verifies that deleteById is called
+    }
+
+
+
 }
