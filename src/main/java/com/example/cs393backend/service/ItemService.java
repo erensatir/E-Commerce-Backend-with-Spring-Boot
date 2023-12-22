@@ -40,7 +40,7 @@ public class ItemService {
     public ItemDto updateItem(Long id, ItemDto itemDto) {
         ItemEntity existingItem = itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
-        // Update logic (e.g., quantity) based on itemDto
+
         existingItem.setQuantity(itemDto.getQuantity());
         ItemEntity updatedItem = itemRepository.save(existingItem);
         return itemMapper.itemEntityToDto(updatedItem);

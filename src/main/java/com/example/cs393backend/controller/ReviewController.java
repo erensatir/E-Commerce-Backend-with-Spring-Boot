@@ -46,5 +46,5 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    // Add any other endpoints as needed
+
 }

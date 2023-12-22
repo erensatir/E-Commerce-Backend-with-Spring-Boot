@@ -7,7 +7,7 @@ public class ProductDto {
     private String name;
     private String description;
     private double price;
-    private List<Long> reviewIds; // Only IDs of the reviews
+    private List<Long> reviewIds;
 
     public long getId() {
         return id;

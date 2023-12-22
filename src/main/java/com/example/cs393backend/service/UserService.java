@@ -37,7 +37,7 @@ public class UserService {
         return userMapper.userEntityToDto(savedUser);
     }
 
-    // Optional: Implement update and delete methods
+
     public UserDto updateUser(Long id, UserDto userDto) {
         UserEntity existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));

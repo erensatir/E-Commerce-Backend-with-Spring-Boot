@@ -46,5 +46,5 @@ public class ShoppingCartController {
         return ResponseEntity.ok().build();
     }
 
-    // Additional endpoints can be added as per your application's requirements
+
 }

@@ -52,8 +52,7 @@ public class ShoppingCartService {
         ShoppingCartEntity shoppingCart = shoppingCartRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Shopping cart not found"));
 
-        // Update logic here. For instance, you might want to update the items in the cart.
-        // This part is highly dependent on your application's business logic.
+
 
         ShoppingCartEntity updatedCart = shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.shoppingCartEntityToDto(updatedCart);
@@ -66,5 +65,5 @@ public class ShoppingCartService {
         shoppingCartRepository.deleteById(id);
     }
 
-    // Additional methods can be added as per your application's requirements
+
 }

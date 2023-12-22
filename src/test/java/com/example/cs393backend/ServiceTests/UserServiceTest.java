@@ -125,8 +125,8 @@ public class UserServiceTest {
 
         userService.deleteUser(userId);
 
-        verify(userRepository).existsById(userId); // Verifies that existsById is called
-        verify(userRepository).deleteById(userId); // Verifies that deleteById is called
+        verify(userRepository).existsById(userId);
+        verify(userRepository).deleteById(userId);
     }
 
 

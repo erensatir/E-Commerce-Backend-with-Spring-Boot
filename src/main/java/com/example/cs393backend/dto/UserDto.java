@@ -5,8 +5,7 @@ public class UserDto {
     private Long id;
     private String username;
     private String email;
-    // Password is typically not included in DTO for security reasons
-    // But you can include it if it's necessary for your business logic
+
 
     // Constructors
     public UserDto() {
@@ -44,5 +43,5 @@ public class UserDto {
         this.email = email;
     }
 
-    // Optional: Override toString, equals, and hashCode methods as per your requirements
+
 }

@@ -46,5 +46,5 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    // Additional endpoints as needed
+
 }
