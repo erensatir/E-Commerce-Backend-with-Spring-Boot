@@ -4,8 +4,8 @@ import com.example.cs393backend.dto.UserDto;
 import com.example.cs393backend.entity.UserEntity;
 import com.example.cs393backend.repository.UserRepository;
 import com.example.cs393backend.service.UserService;
-import com.example.cs393backend.util.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
+import com.example.cs393backend.util.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -103,11 +103,10 @@ public class UserServiceTest {
         updatedUserDto.setUsername("updatedUser");
         updatedUserDto.setEmail("updated@example.com");
 
-        // Act
         when(userMapper.userEntityToDto(any(UserEntity.class))).thenReturn(updatedUserDto);
         UserDto result = userService.updateUser(1L, updatedUserDto);
 
-        // Assert
+
         assertNotNull(result);
         assertEquals(updatedUserDto.getUsername(), result.getUsername());
         assertEquals(updatedUserDto.getEmail(), result.getEmail());

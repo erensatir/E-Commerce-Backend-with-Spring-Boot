@@ -10,6 +10,7 @@ import com.example.cs393backend.repository.OrderRepository;
 import com.example.cs393backend.repository.UserRepository;
 import com.example.cs393backend.repository.ProductRepository;
 import com.example.cs393backend.repository.AddressRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +18,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
+
+
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final AddressRepository addressRepository;
+
     private final OrderMapper orderMapper;
+
 
     public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository, AddressRepository addressRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
