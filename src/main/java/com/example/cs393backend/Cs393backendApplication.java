@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @SpringBootApplication
 public class Cs393backendApplication {
 
@@ -25,11 +28,18 @@ public class Cs393backendApplication {
 			UserDto user1 = new UserDto();
 			user1.setUsername("user1");
 			user1.setEmail("user1@example.com");
+			user1.setPassword("password1");
+			user1.setPhoneNumber("0123456789");
+			user1.setRole("Admin");
 			user1 = userService.createUser(user1);
+
 
 			UserDto user2 = new UserDto();
 			user2.setUsername("user2");
 			user2.setEmail("user2@example.com");
+			user2.setPassword("password2");
+			user2.setPhoneNumber("98746543210");
+			user2.setRole("User");
 			user2 = userService.createUser(user2);
 
 			// Product Initialization
@@ -115,4 +125,5 @@ public class Cs393backendApplication {
 			review2 = reviewService.createReview(review2);
 		};
 	}
+
 }

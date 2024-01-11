@@ -14,11 +14,21 @@ public class UserEntity {
     private String username;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "user")
+
+    private String phoneNumber;
+    private String role;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderEntity> orderEntities;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCartEntity shoppingCart;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewEntity> reviews;
+
+
+    public UserEntity() {
+    }
 
     public Long getId() {
         return id;
@@ -66,5 +76,29 @@ public class UserEntity {
 
     public void setShoppingCart(ShoppingCartEntity shoppingCart) {
         this.shoppingCart = shoppingCart;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public List<ReviewEntity> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewEntity> reviews) {
+        this.reviews = reviews;
     }
 }

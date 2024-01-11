@@ -45,4 +45,11 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
+    @PutMapping("/{id}/reset-password")
+    public ResponseEntity<UserDto> resetUserPassword(@PathVariable Long id, @RequestBody String newPassword) {
+        UserDto updatedUser = userService.resetPassword(id, newPassword);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
 }

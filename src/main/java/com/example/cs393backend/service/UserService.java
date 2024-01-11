@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
@@ -32,20 +34,39 @@ public class UserService {
     }
 
     public UserDto createUser(UserDto userDto) {
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
+        if (userRepository.findByPhoneNumber(userDto.getPhoneNumber()).isPresent()) {
+            throw new RuntimeException("Phone number already in use");
+        }
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         UserEntity userEntity = userMapper.userDtoToEntity(userDto);
         UserEntity savedUser = userRepository.save(userEntity);
         return userMapper.userEntityToDto(savedUser);
     }
 
-
     public UserDto updateUser(Long id, UserDto userDto) {
         UserEntity existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.findByEmail(userDto.getEmail())
+                .ifPresent(user -> {
+                    if (!user.getId().equals(id)) {
+                        throw new RuntimeException("Email already in use");
+                    }
+                });
+        userRepository.findByPhoneNumber(userDto.getPhoneNumber())
+                .ifPresent(user -> {
+                    if (!user.getId().equals(id)) {
+                        throw new RuntimeException("Phone number already in use");
+                    }
+                });
+
+        userDto.setPassword(existingUser.getPassword());
         userMapper.updateUserFromDto(userDto, existingUser);
         userRepository.save(existingUser);
         return userMapper.userEntityToDto(existingUser);
     }
-
 
     public void deleteUser(Long id) {
         if (userRepository.existsById(id)) {
@@ -54,5 +75,14 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
     }
+
+    public UserDto resetPassword(Long id, String newPassword) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return userMapper.userEntityToDto(user);
+    }
+
 
 }
